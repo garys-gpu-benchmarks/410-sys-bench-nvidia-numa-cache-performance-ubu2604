@@ -11,7 +11,7 @@
 | num_threads | `--num-threads` | smoke=1, baseline=4, extended=4 | 4 | From Parameter list; see Execution Description With Parameters. |
 | thread_affinity | `--thread-affinity` | smoke=strict, baseline=strict, extended=strict | strict | From Parameter list; see Execution Description With Parameters. |
 | page_size | `--page-size` | smoke=4KB, baseline=4KB, extended=4KB | 4KB | From Parameter list; see Execution Description With Parameters. |
-| working_set_size | `--working-set-size` | smoke=32768,2097152,16777216, baseline=32768,262144,8388608,268435456, extended=32768,262144,8388608,268435456 | 32768,262144,8388608,268435456 | From Parameter list; see Execution Description With Parameters. |
+| working_set_size | `--working-set-size` | smoke=32768,2097152,268435456, baseline=32768,262144,8388608,268435456, extended=32768,262144,8388608,268435456 | 32768,262144,8388608,268435456 | From Parameter list; see Execution Description With Parameters. |
 | cache_level | `--cache-level` | smoke=L1,L3,DRAM, baseline=L1,L2,L3,DRAM, extended=L1,L2,L3,DRAM | L1,L2,L3,DRAM | From Parameter list; see Execution Description With Parameters. |
 | access_pattern | `--access-pattern` | smoke=random, baseline=random, extended=random | random | From Parameter list; see Execution Description With Parameters. |
 | stride | `--stride` | smoke=64, baseline=64, extended=64 | 64 | From Parameter list; see Execution Description With Parameters. |
