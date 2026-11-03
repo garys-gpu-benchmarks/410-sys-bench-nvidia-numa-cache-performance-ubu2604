@@ -15,7 +15,6 @@ sweep:
     baseline: 4
     extended: 4
   thread_affinity: strict
-  page_size: 4KB
   working_set_size:
     smoke: 32768,2097152,268435456
     baseline: 32768,262144,8388608,268435456

@@ -49,7 +49,6 @@ Workload options:
   --target-numa-node <value>            Override target_numa_node
   --num-threads <value>            Override num_threads
   --thread-affinity <value>            Override thread_affinity
-  --page-size <value>            Override page_size
   --working-set-size <value>            Override working_set_size
   --cache-level <value>            Override cache_level
   --access-pattern <value>            Override access_pattern
@@ -92,7 +91,6 @@ SOURCE_NUMA_NODE=""
 TARGET_NUMA_NODE=""
 NUM_THREADS=""
 THREAD_AFFINITY=""
-PAGE_SIZE=""
 WORKING_SET_SIZE=""
 CACHE_LEVEL=""
 ACCESS_PATTERN=""
@@ -122,7 +120,6 @@ while [[ $# -gt 0 ]]; do
     --target-numa-node) TARGET_NUMA_NODE="${2:-}"; shift 2 ;;
     --num-threads) NUM_THREADS="${2:-}"; shift 2 ;;
     --thread-affinity) THREAD_AFFINITY="${2:-}"; shift 2 ;;
-    --page-size) PAGE_SIZE="${2:-}"; shift 2 ;;
     --working-set-size) WORKING_SET_SIZE="${2:-}"; shift 2 ;;
     --cache-level) CACHE_LEVEL="${2:-}"; shift 2 ;;
     --access-pattern) ACCESS_PATTERN="${2:-}"; shift 2 ;;
@@ -170,7 +167,6 @@ SOURCE_NUMA_NODE="${SOURCE_NUMA_NODE:-$(yaml_get source_numa_node)}"
 TARGET_NUMA_NODE="${TARGET_NUMA_NODE:-$(yaml_get target_numa_node)}"
 NUM_THREADS="${NUM_THREADS:-$(yaml_get num_threads)}"
 THREAD_AFFINITY="${THREAD_AFFINITY:-$(yaml_get thread_affinity)}"
-PAGE_SIZE="${PAGE_SIZE:-$(yaml_get page_size)}"
 WORKING_SET_SIZE="${WORKING_SET_SIZE:-$(yaml_get working_set_size)}"
 CACHE_LEVEL="${CACHE_LEVEL:-$(yaml_get cache_level)}"
 ACCESS_PATTERN="${ACCESS_PATTERN:-$(yaml_get access_pattern)}"
@@ -185,7 +181,6 @@ BENCHMARK_RUN_COMMAND="bash run_benchmark.sh --${PROFILE}"
 [[ -n "${TARGET_NUMA_NODE}" ]] && BENCHMARK_RUN_COMMAND+=" --target-numa-node $(printf %q "${TARGET_NUMA_NODE}")"
 [[ -n "${NUM_THREADS}" ]] && BENCHMARK_RUN_COMMAND+=" --num-threads $(printf %q "${NUM_THREADS}")"
 [[ -n "${THREAD_AFFINITY}" ]] && BENCHMARK_RUN_COMMAND+=" --thread-affinity $(printf %q "${THREAD_AFFINITY}")"
-[[ -n "${PAGE_SIZE}" ]] && BENCHMARK_RUN_COMMAND+=" --page-size $(printf %q "${PAGE_SIZE}")"
 [[ -n "${WORKING_SET_SIZE}" ]] && BENCHMARK_RUN_COMMAND+=" --working-set-size $(printf %q "${WORKING_SET_SIZE}")"
 [[ -n "${CACHE_LEVEL}" ]] && BENCHMARK_RUN_COMMAND+=" --cache-level $(printf %q "${CACHE_LEVEL}")"
 [[ -n "${ACCESS_PATTERN}" ]] && BENCHMARK_RUN_COMMAND+=" --access-pattern $(printf %q "${ACCESS_PATTERN}")"
@@ -237,7 +232,6 @@ run_collection() {
   grep -q -- '--target-numa-node' <<<"${help}" && collect_args+=(--target-numa-node "${TARGET_NUMA_NODE}")
   grep -q -- '--num-threads' <<<"${help}" && collect_args+=(--num-threads "${NUM_THREADS}")
   grep -q -- '--thread-affinity' <<<"${help}" && collect_args+=(--thread-affinity "${THREAD_AFFINITY}")
-  grep -q -- '--page-size' <<<"${help}" && collect_args+=(--page-size "${PAGE_SIZE}")
   grep -q -- '--working-set-size' <<<"${help}" && collect_args+=(--working-set-size "${WORKING_SET_SIZE}")
   grep -q -- '--cache-level' <<<"${help}" && collect_args+=(--cache-level "${CACHE_LEVEL}")
   grep -q -- '--access-pattern' <<<"${help}" && collect_args+=(--access-pattern "${ACCESS_PATTERN}")
