@@ -25,6 +25,11 @@
     "value": "sys-bench-nvidia-numa-cache-performance-ubu2604"
   },
   {
+    "field_name": "Repo Directory Name",
+    "source_file": "BenchmarkSpecDefinitions.xlsx::Workload_Definitions",
+    "value": "410-sys-bench-nvidia-numa-cache-performance-ubu2604"
+  },
+  {
     "field_name": "Main Goal",
     "source_file": "BenchmarkSpecDefinitions.xlsx::Workload_Definitions",
     "value": "Measure NUMA local vs remote stride-walk latency"
