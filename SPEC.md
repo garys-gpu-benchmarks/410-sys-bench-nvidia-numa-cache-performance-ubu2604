@@ -86,9 +86,9 @@ summary,0,0,1,0,4KB,268435456,DRAM,random,64,1000000,ok,12,80,,,1.2,1000
 
 ```bash
 bash run_benchmark.sh --help
-bash run_benchmark.sh --smoke --validate
-bash run_benchmark.sh --baseline --validate
-bash run_benchmark.sh --extended --validate
+bash run_benchmark.sh --smoke
+bash run_benchmark.sh --baseline
+bash run_benchmark.sh --extended
 ```
 `run_benchmark.sh --help` prints usage and exits. The harness calls `scripts/ensure_setup.sh` when `.setup_state` is absent.
 

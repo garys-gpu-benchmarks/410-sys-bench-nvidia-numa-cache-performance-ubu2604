@@ -1,8 +1,8 @@
 #!/usr/bin/env bash
 # File: run_benchmark.sh
 # Description: Builds src/numa_sweep.
-# Execution: bash run_benchmark.sh [--smoke|--baseline|--extended] [--validate]
-# Options: --smoke, --baseline, --extended, --config, --validate, --help
+# Execution: bash run_benchmark.sh [--smoke|--baseline|--extended]
+# Options: --smoke, --baseline, --extended, --config, --help
 # Requirements: bash, python3, repository-local .venv
 # Dependencies: common.sh, collect_workload.py
 # License: Apache-2.0
@@ -20,21 +20,12 @@ Usage: bash run_benchmark.sh [OPTIONS]
 
 Builds src/numa_sweep.
 
-Profiles:
+Profiles (default: --smoke):
   --smoke                       Run smoke profile
   --baseline                    Run baseline profile
   --extended                    Run extended profile
 
-Execution:
-  --config <file>               Config file (default: config/benchmark_config.yaml)
-
-Validation and logging:
-  --validate                    Enable result validation (default)
-  --no-validate                 Skip result validation
-  --quiet                       Suppress nonessential stdout
-  --log-level <level>           ERROR|WARN|INFO|DEBUG (default: INFO)
-
-Workload options:
+Parameters (override the profile's value):
   --source-numa-node <value>    Shared workload parameter (smoke/baseline/extended: 0)
   --target-numa-node <value>    Shared workload parameter (smoke/baseline/extended: 0,remote)
   --num-threads <n>             Execution threads issuing work (smoke 1, baseline 4, extended 4)
@@ -45,14 +36,18 @@ Workload options:
   --stride <n>                  Distance between successive memory accesses (smoke/baseline/extended: 64)
   --num-iterations <n>          Number of timed repetitions (smoke 20000, baseline 460000000, extended 1243000000)
 
-Information:
+General options:
+  --config <file>               Config file (default: config/benchmark_config.yaml)
+  --quiet                       Suppress nonessential stdout
+  --log-level <level>           ERROR|WARN|INFO|DEBUG (default: INFO)
   --specification               Print this workload's specification and exit
   --help                        Show this help and exit
 
 Examples:
-  bash run_benchmark.sh --smoke --validate
-  bash run_benchmark.sh --baseline --validate
-  bash run_benchmark.sh --extended --validate
+  bash run_benchmark.sh --smoke
+  bash run_benchmark.sh --baseline
+  bash run_benchmark.sh --extended
+  bash run_benchmark.sh --baseline --num-threads 2
 USAGE
 }
 
@@ -68,7 +63,6 @@ done
 
 PROFILE="smoke"
 CONFIG_FILE="config/benchmark_config.yaml"
-VALIDATE=1
 QUIET=0
 LOG_LEVEL_VALUE="INFO"
 SOURCE_NUMA_NODE=""
@@ -87,8 +81,7 @@ while [[ $# -gt 0 ]]; do
     --baseline) PROFILE="baseline"; shift ;;
     --extended) PROFILE="extended"; shift ;;
     --config) CONFIG_FILE="${2:-}"; shift 2 ;;
-    --validate) VALIDATE=1; shift ;;
-    --no-validate) VALIDATE=0; shift ;;
+    --validate) shift ;;  # ignored; result validation always runs
     --quiet) QUIET=1; shift ;;
     --log-level) LOG_LEVEL_VALUE="${2:-}"; shift 2 ;;
     --source-numa-node) SOURCE_NUMA_NODE="${2:-}"; shift 2 ;;
@@ -144,7 +137,6 @@ OUTPUT_FORMAT="$(yaml_get output_format)"
 OUTPUT_FORMAT="${OUTPUT_FORMAT:-csv}"
 
 BENCHMARK_RUN_COMMAND="bash run_benchmark.sh --${PROFILE}"
-[[ "${VALIDATE}" -eq 1 ]] && BENCHMARK_RUN_COMMAND+=" --validate"
 [[ -n "${SOURCE_NUMA_NODE}" ]] && BENCHMARK_RUN_COMMAND+=" --source-numa-node $(printf %q "${SOURCE_NUMA_NODE}")"
 [[ -n "${TARGET_NUMA_NODE}" ]] && BENCHMARK_RUN_COMMAND+=" --target-numa-node $(printf %q "${TARGET_NUMA_NODE}")"
 [[ -n "${NUM_THREADS}" ]] && BENCHMARK_RUN_COMMAND+=" --num-threads $(printf %q "${NUM_THREADS}")"
@@ -222,7 +214,7 @@ run_validate() {
 
 run_collection
 run_parse
-[[ "${VALIDATE}" -eq 1 ]] && run_validate
+run_validate
 record_benchmark_stop
 capture_journal_warnings "${RUN_DIR}" "${BENCHMARK_START_DATETIME}" "${STOP_TIME}"
 bash scripts/collect_hw_sw_info.sh "${RUN_DIR}"
