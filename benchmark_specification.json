@@ -20,7 +20,7 @@
     "value": "Ubuntu 26.04"
   },
   {
-    "field_name": "Repo Name",
+    "field_name": "Repo Base Name",
     "source_file": "BenchmarkSpecDefinitions.xlsx::Workload_Definitions",
     "value": "sys-bench-nvidia-numa-cache-performance-ubu2604"
   },
@@ -35,199 +35,9 @@
     "value": "Measure NUMA local vs remote stride-walk latency"
   },
   {
-    "field_name": "Validation Objective",
-    "source_file": "BenchmarkSpecDefinitions.xlsx::Workload_Definitions",
-    "value": "Validates paired local/remote numa_sweep runs. On single-node or membind-denied hosts, remote latency may equal local"
-  },
-  {
     "field_name": "Metrics",
     "source_file": "BenchmarkSpecDefinitions.xlsx::Workload_Definitions",
     "value": "#1: Largest cache-tier pointer-chase latency, ns (cache_latency_nsec); #2: Local DRAM pointer-chase latency, ns (local_numa_node_latency_nsec); #3: Pointer-chase payload rate, GB/s (local_dram_pointer_chase_bandwidth_gb_s); #4: DRAM-tier cache misses/s (cache_miss_counters_misses_sec)"
-  },
-  {
-    "field_name": "Command Tools Executed",
-    "source_file": "BenchmarkSpecDefinitions.xlsx::Workload_Definitions",
-    "value": "Build numa_sweep with cmake/g++; launch via collect_numa_cache.py with numactl; optionally wrap with perf stat -e cache-misses"
-  },
-  {
-    "field_name": "Command Execution Details and Purpose",
-    "source_file": "BenchmarkSpecDefinitions.xlsx::Workload_Definitions",
-    "value": "Build src/numa_sweep.cpp and run a stride-64 pointer chase on yaml local and remote NUMA targets for each working_set_size, optionally under perf stat -e cache-misses, to measure local versus remote latency, cross-socket ratio, bandwidth, and miss rate. collect_numa_cache.py writes those metrics into the harness raw file"
-  },
-  {
-    "field_name": "Command Methodology",
-    "source_file": "BenchmarkSpecDefinitions.xlsx::Workload_Definitions",
-    "value": "Build src/numa_sweep.cpp and run a stride-64 pointer chase on yaml local and remote NUMA targets for each working_set_size, optionally under perf stat -e cache-misses. Record local versus remote latency, cross-socket ratio, bandwidth, and miss rate. collect_numa_cache.py writes those metrics into the harness raw file"
-  },
-  {
-    "field_name": "Execution Description With Parameters",
-    "source_file": "BenchmarkSpecDefinitions.xlsx::Workload_Definitions",
-    "value": "Builds src/numa_sweep.cpp and runs scripts/collect_numa_cache.py (dispatched by scripts/collect_workload.py) for local/remote working-set sizes. source_numa_node/target_numa_node: intended bind pair (yaml 0 versus 0,remote). working_set_size: swept footprints. num_threads, page_size, cache_level, access_pattern, stride, and num_iterations come from yaml. Optional perf stat -e cache-misses may record 0 if perf_event_open is blocked; numactl mempolicy falls back if the container denies it. The overlay writes the full METRICS_CSV (local/remote latency, cross-socket ratio, bandwidth, and cache-misses) into the raw file; the harness does not strip the file to latency-only columns"
-  },
-  {
-    "field_name": "Execution Domain",
-    "source_file": "BenchmarkSpecDefinitions.xlsx::Workload_Definitions",
-    "value": "CPU / System"
-  },
-  {
-    "field_name": "Workload Category",
-    "source_file": "BenchmarkSpecDefinitions.xlsx::Workload_Definitions",
-    "value": "Memory, Bandwidth & Data Movement"
-  },
-  {
-    "field_name": "Workload Type",
-    "source_file": "BenchmarkSpecDefinitions.xlsx::Workload_Definitions",
-    "value": "Benchmark"
-  },
-  {
-    "field_name": "Target Hardware",
-    "source_file": "BenchmarkSpecDefinitions.xlsx::Workload_Definitions",
-    "value": "CPU"
-  },
-  {
-    "field_name": "GPU Model",
-    "source_file": "BenchmarkSpecDefinitions.xlsx::Workload_Definitions",
-    "value": "H100 SXM 80GB"
-  },
-  {
-    "field_name": "Raw Output Format",
-    "source_file": "BenchmarkSpecDefinitions.xlsx::Workload_Definitions",
-    "value": "collect_numa_cache.py CSV written as the harness raw file. Per-size detail is also written to per_size.csv"
-  },
-  {
-    "field_name": "Primary Record Granularity",
-    "source_file": "BenchmarkSpecDefinitions.xlsx::Workload_Definitions",
-    "value": "one summary row for the selected cache tier and DRAM tier, plus per-size rows in per_size.csv"
-  },
-  {
-    "field_name": "Raw Output Example",
-    "source_file": "BenchmarkSpecDefinitions.xlsx::Workload_Definitions",
-    "value": "check,source_numa_node,target_numa_node,num_threads,thread_affinity,page_size,working_set_size,cache_level,access_pattern,stride,num_iterations,status,cache_latency_nsec,local_numa_node_latency_nsec,remote_numa_node_latency_nsec,cross_socket_numa_penalty_ratio,local_dram_pointer_chase_bandwidth_gb_s,cache_miss_counters_misses_sec\nsummary,0,0,1,0,4KB,268435456,DRAM,random,64,1000000,ok,12,80,,,1.2,1000"
-  },
-  {
-    "field_name": "run_benchmark Command Plus Options for Smoke Run",
-    "source_file": "BenchmarkSpecDefinitions.xlsx::Workload_Definitions",
-    "value": "bash run_benchmark.sh --smoke --validate --source-numa-node 0 --target-numa-node 0,remote --num-threads 1 --thread-affinity strict --working-set-size 32768,2097152,268435456 --cache-level L1,L3,DRAM --access-pattern random --stride 64 --num-iterations 20000"
-  },
-  {
-    "field_name": "run_benchmark Command Plus Options for Baseline Run",
-    "source_file": "BenchmarkSpecDefinitions.xlsx::Workload_Definitions",
-    "value": "bash run_benchmark.sh --baseline --validate --source-numa-node 0 --target-numa-node 0,remote --num-threads 4 --thread-affinity strict --working-set-size 32768,262144,8388608,268435456 --cache-level L1,L2,L3,DRAM --access-pattern random --stride 64 --num-iterations 460000000"
-  },
-  {
-    "field_name": "run_benchmark Command Plus Options for Extended Run",
-    "source_file": "BenchmarkSpecDefinitions.xlsx::Workload_Definitions",
-    "value": "bash run_benchmark.sh --extended --validate --source-numa-node 0 --target-numa-node 0,remote --num-threads 4 --thread-affinity strict --working-set-size 32768,262144,8388608,268435456 --cache-level L1,L2,L3,DRAM --access-pattern random --stride 64 --num-iterations 1243000000"
-  },
-  {
-    "field_name": "Output Fields / Metrics to Parse",
-    "source_file": "BenchmarkSpecDefinitions.xlsx::Workload_Definitions",
-    "value": "cache_latency_nsec, local_numa_node_latency_nsec, remote_numa_node_latency_nsec, cross_socket_numa_penalty_ratio, local_dram_pointer_chase_bandwidth_gb_s, cache_miss_counters_misses_sec"
-  },
-  {
-    "field_name": "Success Criteria",
-    "source_file": "BenchmarkSpecDefinitions.xlsx::Workload_Definitions",
-    "value": "summary and summary_repeat parse with a finite local latency"
-  },
-  {
-    "field_name": "Parser and Normalization Notes",
-    "source_file": "BenchmarkSpecDefinitions.xlsx::Workload_Definitions",
-    "value": "The harness raw file is the collector CSV: parameter columns plus cache latency, local and remote latency, the cross-socket ratio, local DRAM bandwidth, and the cache-miss rate. Per-size rows stay in per_size.csv. Remote latency is na when the host has one NUMA node"
-  },
-  {
-    "field_name": "Hardware Config",
-    "source_file": "BenchmarkSpecDefinitions.xlsx::Workload_Definitions",
-    "value": "NVIDIA H100 SXM host (20+ vCPUs, 128+ GB RAM, local NVMe), 1x H100 SXM (80 GB HBM3, sm_90, 132 SMs)"
-  },
-  {
-    "field_name": "GPU Architecture",
-    "source_file": "BenchmarkSpecDefinitions.xlsx::Workload_Definitions",
-    "value": "sm_90 (NVIDIA Hopper H100)"
-  },
-  {
-    "field_name": "Framework",
-    "source_file": "BenchmarkSpecDefinitions.xlsx::Workload_Definitions",
-    "value": "Bash, SQLite, Python, PyYAML, C++, CMake, GCC, numactl, Linux perf (optional)"
-  },
-  {
-    "field_name": "Kernel Version",
-    "source_file": "BenchmarkSpecDefinitions.xlsx::Workload_Definitions",
-    "value": "kernel 7.0.0"
-  },
-  {
-    "field_name": "Runtime Language",
-    "source_file": "BenchmarkSpecDefinitions.xlsx::Workload_Definitions",
-    "value": "C++"
-  },
-  {
-    "field_name": "Container Base Image",
-    "source_file": "BenchmarkSpecDefinitions.xlsx::Workload_Definitions",
-    "value": "Provider-supplied Ubuntu 26.04 container; CUDA 13.3 toolkit installed by setup"
-  },
-  {
-    "field_name": "Python Version",
-    "source_file": "BenchmarkSpecDefinitions.xlsx::Workload_Definitions",
-    "value": "Python 3.14.4"
-  },
-  {
-    "field_name": "GPU Runtime Version (was ROCm Version)",
-    "source_file": "BenchmarkSpecDefinitions.xlsx::Workload_Definitions",
-    "value": "CUDA 13.3 (nvcc 13.3.73). Driver 580.159.04 reports CUDA 13.0"
-  },
-  {
-    "field_name": "BLAS Version (was rocBLAS version)",
-    "source_file": "BenchmarkSpecDefinitions.xlsx::Workload_Definitions",
-    "value": "N/A - cuBLAS not used"
-  },
-  {
-    "field_name": "Mistral-7B Version",
-    "source_file": "BenchmarkSpecDefinitions.xlsx::Workload_Definitions",
-    "value": "N/A - Mistral not used"
-  },
-  {
-    "field_name": "PyTorch Version",
-    "source_file": "BenchmarkSpecDefinitions.xlsx::Workload_Definitions",
-    "value": "N/A - PyTorch not used"
-  },
-  {
-    "field_name": "torchvision Version",
-    "source_file": "BenchmarkSpecDefinitions.xlsx::Workload_Definitions",
-    "value": "N/A - torchvision not used"
-  },
-  {
-    "field_name": "vLLM Version",
-    "source_file": "BenchmarkSpecDefinitions.xlsx::Workload_Definitions",
-    "value": "N/A - vLLM not used"
-  },
-  {
-    "field_name": "vLLM Wheel/Source Index",
-    "source_file": "BenchmarkSpecDefinitions.xlsx::Workload_Definitions",
-    "value": "N/A - vLLM not used"
-  },
-  {
-    "field_name": "SGLang Version",
-    "source_file": "BenchmarkSpecDefinitions.xlsx::Workload_Definitions",
-    "value": "N/A - SGLang not used"
-  },
-  {
-    "field_name": "SGLang Repository/Commit",
-    "source_file": "BenchmarkSpecDefinitions.xlsx::Workload_Definitions",
-    "value": "N/A - SGLang not used"
-  },
-  {
-    "field_name": "Cmake Version",
-    "source_file": "BenchmarkSpecDefinitions.xlsx::Workload_Definitions",
-    "value": "CMake 4.2.3"
-  },
-  {
-    "field_name": "g++ Version",
-    "source_file": "BenchmarkSpecDefinitions.xlsx::Workload_Definitions",
-    "value": "g++: 15.2.0"
-  },
-  {
-    "field_name": "Known Runtime Constraints (<=35 Words Each)",
-    "source_file": "BenchmarkSpecDefinitions.xlsx::Workload_Definitions",
-    "value": "numactl --membind may be denied, making remote equal local. Blocked perf records zero cache misses. Single-node hosts have no remote node"
   },
   {
     "field_name": "Parameter_01",
@@ -328,6 +138,196 @@
     "field_name": "Parameter_20",
     "source_file": "BenchmarkSpecDefinitions.xlsx::Workload_Definitions",
     "value": "-"
+  },
+  {
+    "field_name": "run_benchmark Command Plus Options for Smoke Run (One minute or less)",
+    "source_file": "BenchmarkSpecDefinitions.xlsx::Workload_Definitions",
+    "value": "bash run_benchmark.sh --smoke --validate --source-numa-node 0 --target-numa-node 0,remote --num-threads 1 --thread-affinity strict --working-set-size 32768,2097152,268435456 --cache-level L1,L3,DRAM --access-pattern random --stride 64 --num-iterations 20000"
+  },
+  {
+    "field_name": "run_benchmark Command Plus Options for Baseline Run (3 to 5 minutes)",
+    "source_file": "BenchmarkSpecDefinitions.xlsx::Workload_Definitions",
+    "value": "bash run_benchmark.sh --baseline --validate --source-numa-node 0 --target-numa-node 0,remote --num-threads 4 --thread-affinity strict --working-set-size 32768,262144,8388608,268435456 --cache-level L1,L2,L3,DRAM --access-pattern random --stride 64 --num-iterations 460000000"
+  },
+  {
+    "field_name": "run_benchmark Command Plus Options for Extended Run (8 to 15 minutes)",
+    "source_file": "BenchmarkSpecDefinitions.xlsx::Workload_Definitions",
+    "value": "bash run_benchmark.sh --extended --validate --source-numa-node 0 --target-numa-node 0,remote --num-threads 4 --thread-affinity strict --working-set-size 32768,262144,8388608,268435456 --cache-level L1,L2,L3,DRAM --access-pattern random --stride 64 --num-iterations 1243000000"
+  },
+  {
+    "field_name": "Validation Objective",
+    "source_file": "BenchmarkSpecDefinitions.xlsx::Workload_Definitions",
+    "value": "Validates paired local/remote numa_sweep runs. On single-node or membind-denied hosts, remote latency may equal local"
+  },
+  {
+    "field_name": "Command Tools Executed",
+    "source_file": "BenchmarkSpecDefinitions.xlsx::Workload_Definitions",
+    "value": "Build numa_sweep with cmake/g++; launch via collect_numa_cache.py with numactl; optionally wrap with perf stat -e cache-misses"
+  },
+  {
+    "field_name": "Command Execution Details and Purpose",
+    "source_file": "BenchmarkSpecDefinitions.xlsx::Workload_Definitions",
+    "value": "Build src/numa_sweep.cpp and run a stride-64 pointer chase on yaml local and remote NUMA targets for each working_set_size, optionally under perf stat -e cache-misses, to measure local versus remote latency, cross-socket ratio, bandwidth, and miss rate. collect_numa_cache.py writes those metrics into the harness raw file"
+  },
+  {
+    "field_name": "Command Methodology",
+    "source_file": "BenchmarkSpecDefinitions.xlsx::Workload_Definitions",
+    "value": "Build src/numa_sweep.cpp and run a stride-64 pointer chase on yaml local and remote NUMA targets for each working_set_size, optionally under perf stat -e cache-misses. Record local versus remote latency, cross-socket ratio, bandwidth, and miss rate. collect_numa_cache.py writes those metrics into the harness raw file"
+  },
+  {
+    "field_name": "Execution Description With Parameters",
+    "source_file": "BenchmarkSpecDefinitions.xlsx::Workload_Definitions",
+    "value": "Builds src/numa_sweep.cpp and runs scripts/collect_numa_cache.py (dispatched by scripts/collect_workload.py) for local/remote working-set sizes. source_numa_node/target_numa_node: intended bind pair (yaml 0 versus 0,remote). working_set_size: swept footprints. num_threads, page_size, cache_level, access_pattern, stride, and num_iterations come from yaml. Optional perf stat -e cache-misses may record 0 if perf_event_open is blocked; numactl mempolicy falls back if the container denies it. The overlay writes the full METRICS_CSV (local/remote latency, cross-socket ratio, bandwidth, and cache-misses) into the raw file; the harness does not strip the file to latency-only columns"
+  },
+  {
+    "field_name": "Execution Domain",
+    "source_file": "BenchmarkSpecDefinitions.xlsx::Workload_Definitions",
+    "value": "CPU / System"
+  },
+  {
+    "field_name": "Workload Category",
+    "source_file": "BenchmarkSpecDefinitions.xlsx::Workload_Definitions",
+    "value": "Memory, Bandwidth & Data Movement"
+  },
+  {
+    "field_name": "Workload Type",
+    "source_file": "BenchmarkSpecDefinitions.xlsx::Workload_Definitions",
+    "value": "Benchmark"
+  },
+  {
+    "field_name": "Target Hardware",
+    "source_file": "BenchmarkSpecDefinitions.xlsx::Workload_Definitions",
+    "value": "CPU"
+  },
+  {
+    "field_name": "GPU Model",
+    "source_file": "BenchmarkSpecDefinitions.xlsx::Workload_Definitions",
+    "value": "H100 SXM 80GB"
+  },
+  {
+    "field_name": "Raw Output Format",
+    "source_file": "BenchmarkSpecDefinitions.xlsx::Workload_Definitions",
+    "value": "collect_numa_cache.py CSV written as the harness raw file. Per-size detail is also written to per_size.csv"
+  },
+  {
+    "field_name": "Primary Record Granularity",
+    "source_file": "BenchmarkSpecDefinitions.xlsx::Workload_Definitions",
+    "value": "one summary row for the selected cache tier and DRAM tier, plus per-size rows in per_size.csv"
+  },
+  {
+    "field_name": "Raw Output Example",
+    "source_file": "BenchmarkSpecDefinitions.xlsx::Workload_Definitions",
+    "value": "check,source_numa_node,target_numa_node,num_threads,thread_affinity,page_size,working_set_size,cache_level,access_pattern,stride,num_iterations,status,cache_latency_nsec,local_numa_node_latency_nsec,remote_numa_node_latency_nsec,cross_socket_numa_penalty_ratio,local_dram_pointer_chase_bandwidth_gb_s,cache_miss_counters_misses_sec\nsummary,0,0,1,0,4KB,268435456,DRAM,random,64,1000000,ok,12,80,,,1.2,1000"
+  },
+  {
+    "field_name": "Output Fields / Metrics to Parse",
+    "source_file": "BenchmarkSpecDefinitions.xlsx::Workload_Definitions",
+    "value": "cache_latency_nsec, local_numa_node_latency_nsec, remote_numa_node_latency_nsec, cross_socket_numa_penalty_ratio, local_dram_pointer_chase_bandwidth_gb_s, cache_miss_counters_misses_sec"
+  },
+  {
+    "field_name": "Success Criteria",
+    "source_file": "BenchmarkSpecDefinitions.xlsx::Workload_Definitions",
+    "value": "summary and summary_repeat parse with a finite local latency"
+  },
+  {
+    "field_name": "Parser and Normalization Notes",
+    "source_file": "BenchmarkSpecDefinitions.xlsx::Workload_Definitions",
+    "value": "The harness raw file is the collector CSV: parameter columns plus cache latency, local and remote latency, the cross-socket ratio, local DRAM bandwidth, and the cache-miss rate. Per-size rows stay in per_size.csv. Remote latency is na when the host has one NUMA node"
+  },
+  {
+    "field_name": "Hardware Config",
+    "source_file": "BenchmarkSpecDefinitions.xlsx::Workload_Definitions",
+    "value": "NVIDIA H100 SXM host (20+ vCPUs, 128+ GB RAM, local NVMe), 1x H100 SXM (80 GB HBM3, sm_90, 132 SMs)"
+  },
+  {
+    "field_name": "GPU Architecture",
+    "source_file": "BenchmarkSpecDefinitions.xlsx::Workload_Definitions",
+    "value": "sm_90 (NVIDIA Hopper H100)"
+  },
+  {
+    "field_name": "Framework",
+    "source_file": "BenchmarkSpecDefinitions.xlsx::Workload_Definitions",
+    "value": "Bash, SQLite, Python, PyYAML, C++, CMake, GCC, numactl, Linux perf (optional)"
+  },
+  {
+    "field_name": "Kernel Version",
+    "source_file": "BenchmarkSpecDefinitions.xlsx::Workload_Definitions",
+    "value": "kernel 7.0.0"
+  },
+  {
+    "field_name": "Runtime Language",
+    "source_file": "BenchmarkSpecDefinitions.xlsx::Workload_Definitions",
+    "value": "C++"
+  },
+  {
+    "field_name": "Container Base Image",
+    "source_file": "BenchmarkSpecDefinitions.xlsx::Workload_Definitions",
+    "value": "host-native Ubuntu 26.04"
+  },
+  {
+    "field_name": "Python Version",
+    "source_file": "BenchmarkSpecDefinitions.xlsx::Workload_Definitions",
+    "value": "Python 3.14.4"
+  },
+  {
+    "field_name": "GPU Runtime Version (was ROCm Version)",
+    "source_file": "BenchmarkSpecDefinitions.xlsx::Workload_Definitions",
+    "value": "CUDA 13.3 (nvcc 13.3.73). Driver 580.159.04 reports CUDA 13.0"
+  },
+  {
+    "field_name": "BLAS Version (was rocBLAS version)",
+    "source_file": "BenchmarkSpecDefinitions.xlsx::Workload_Definitions",
+    "value": "N/A - cuBLAS not used"
+  },
+  {
+    "field_name": "Mistral-7B Version",
+    "source_file": "BenchmarkSpecDefinitions.xlsx::Workload_Definitions",
+    "value": "N/A - Mistral not used"
+  },
+  {
+    "field_name": "PyTorch Version",
+    "source_file": "BenchmarkSpecDefinitions.xlsx::Workload_Definitions",
+    "value": "N/A - PyTorch not used"
+  },
+  {
+    "field_name": "torchvision Version",
+    "source_file": "BenchmarkSpecDefinitions.xlsx::Workload_Definitions",
+    "value": "N/A - torchvision not used"
+  },
+  {
+    "field_name": "vLLM Version",
+    "source_file": "BenchmarkSpecDefinitions.xlsx::Workload_Definitions",
+    "value": "N/A - vLLM not used"
+  },
+  {
+    "field_name": "vLLM Wheel/Source Index",
+    "source_file": "BenchmarkSpecDefinitions.xlsx::Workload_Definitions",
+    "value": "N/A - vLLM not used"
+  },
+  {
+    "field_name": "SGLang Version",
+    "source_file": "BenchmarkSpecDefinitions.xlsx::Workload_Definitions",
+    "value": "N/A - SGLang not used"
+  },
+  {
+    "field_name": "SGLang Repository/Commit",
+    "source_file": "BenchmarkSpecDefinitions.xlsx::Workload_Definitions",
+    "value": "N/A - SGLang not used"
+  },
+  {
+    "field_name": "Cmake Version",
+    "source_file": "BenchmarkSpecDefinitions.xlsx::Workload_Definitions",
+    "value": "CMake 4.2.3"
+  },
+  {
+    "field_name": "g++ Version",
+    "source_file": "BenchmarkSpecDefinitions.xlsx::Workload_Definitions",
+    "value": "g++: 15.2.0"
+  },
+  {
+    "field_name": "Known Runtime Constraints (<=35 Words Each)",
+    "source_file": "BenchmarkSpecDefinitions.xlsx::Workload_Definitions",
+    "value": "numactl --membind may be denied, making remote equal local. Blocked perf records zero cache misses. Single-node hosts have no remote node"
   },
   {
     "field_name": "GPU Architecutre ID",
