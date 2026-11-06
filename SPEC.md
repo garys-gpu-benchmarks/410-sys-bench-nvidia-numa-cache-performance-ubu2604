@@ -19,7 +19,7 @@
 ## Invocation
 
 ```bash
-Build numa_sweep with cmake/g++; launch via collect_numa_cache.py with numactl; optionally wrap with perf stat -e cache-misses
+Build and run numa_sweep via collect_numa_cache.py, with numactl and optional perf stat
 ```
 
 ## Raw Output Format
@@ -47,7 +47,7 @@ Build src/numa_sweep.cpp and run a stride-64 pointer chase on yaml local and rem
 ## Platform Portability
 
 - **AMD (primary):** ```bash
-Build numa_sweep with cmake/g++; launch via collect_numa_cache.py with numactl; optionally wrap with perf stat -e cache-misses
+Build and run numa_sweep via collect_numa_cache.py, with numactl and optional perf stat
 ```
 - **NVIDIA:** Native NVIDIA CUDA workload. Execute on the stated Ubuntu release with the host NVIDIA driver and CUDA userspace. ROCm porting notes do not apply.
 

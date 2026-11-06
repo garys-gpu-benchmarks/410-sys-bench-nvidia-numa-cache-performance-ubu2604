@@ -21,7 +21,7 @@ Build src/numa_sweep.cpp and run a stride-64 pointer chase on yaml local and rem
 Measure NUMA local vs remote stride-walk latency
 
 ## Validation Objective
-Validates paired local/remote numa_sweep runs. On single-node or membind-denied hosts, remote latency may equal local
+Validates local and remote numa_sweep latency. On one node, remote may equal local
 
 ## Workload Category
 Memory, Bandwidth & Data Movement
