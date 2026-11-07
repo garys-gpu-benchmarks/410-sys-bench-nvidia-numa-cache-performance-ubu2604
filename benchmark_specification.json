@@ -35,6 +35,11 @@
     "value": "Measure NUMA local vs remote stride-walk latency"
   },
   {
+    "field_name": "Command Tools Executed",
+    "source_file": "BenchmarkSpecDefinitions.xlsx::Workload_Definitions",
+    "value": "Build and run numa_sweep via collect_numa_cache.py, with numactl and optional perf stat"
+  },
+  {
     "field_name": "Metrics",
     "source_file": "BenchmarkSpecDefinitions.xlsx::Workload_Definitions",
     "value": "#1: Largest cache-tier pointer-chase latency, ns (cache_latency_nsec); #2: Local DRAM pointer-chase latency, ns (local_numa_node_latency_nsec); #3: Pointer-chase payload rate, GB/s (local_dram_pointer_chase_bandwidth_gb_s); #4: DRAM-tier cache misses/s (cache_miss_counters_misses_sec)"
@@ -140,16 +145,6 @@
     "value": "-"
   },
   {
-    "field_name": "Validation Objective",
-    "source_file": "BenchmarkSpecDefinitions.xlsx::Workload_Definitions",
-    "value": "Validates local and remote numa_sweep latency. On one node, remote may equal local"
-  },
-  {
-    "field_name": "Command Tools Executed",
-    "source_file": "BenchmarkSpecDefinitions.xlsx::Workload_Definitions",
-    "value": "Build and run numa_sweep via collect_numa_cache.py, with numactl and optional perf stat"
-  },
-  {
     "field_name": "run_benchmark Command Plus Options for Smoke Run (One minute or less)",
     "source_file": "BenchmarkSpecDefinitions.xlsx::Workload_Definitions",
     "value": "bash run_benchmark.sh --smoke --validate --source-numa-node 0 --target-numa-node 0,remote --num-threads 1 --thread-affinity strict --working-set-size 32768,2097152,268435456 --cache-level L1,L3,DRAM --access-pattern random --stride 64 --num-iterations 20000"
@@ -163,6 +158,11 @@
     "field_name": "run_benchmark Command Plus Options for Extended Run (8 to 15 minutes)",
     "source_file": "BenchmarkSpecDefinitions.xlsx::Workload_Definitions",
     "value": "bash run_benchmark.sh --extended --validate --source-numa-node 0 --target-numa-node 0,remote --num-threads 4 --thread-affinity strict --working-set-size 32768,262144,8388608,268435456 --cache-level L1,L2,L3,DRAM --access-pattern random --stride 64 --num-iterations 1243000000"
+  },
+  {
+    "field_name": "Validation Objective",
+    "source_file": "BenchmarkSpecDefinitions.xlsx::Workload_Definitions",
+    "value": "Validates local and remote numa_sweep latency. On one node, remote may equal local"
   },
   {
     "field_name": "Command Execution Details and Purpose",
