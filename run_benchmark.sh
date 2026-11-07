@@ -33,12 +33,21 @@ Parameters (override the profile's value):
   --source-numa-node <value>    Shared workload parameter (smoke/baseline/extended: 0)
   --target-numa-node <value>    Shared workload parameter (smoke/baseline/extended: 0,remote)
   --num-threads <n>             Execution threads issuing work (smoke 1, baseline 4, extended 4)
-  --thread-affinity <value>     Policy or CPU/NUMA placement for execution threads (smoke/baseline/extended: strict)
-  --working-set-size <value>    Memory region size used by the workload (smoke 32768,2097152,268435456, baseline 32768,262144,8388608,268435456, extended 32768,262144,8388608,268435456)
-  --cache-level <value>         Shared workload parameter (smoke L1,L3,DRAM, baseline L1,L2,L3,DRAM, extended L1,L2,L3,DRAM)
+  --thread-affinity <value>     Policy or CPU/NUMA placement for execution threads
+                                  all profiles: strict
+  --working-set-size <value>    Memory region size used by the workload
+                                  smoke:             32768,2097152,268435456
+                                  baseline/extended: 32768,262144,8388608,268435456
+  --cache-level <value>         Shared workload parameter
+                                  smoke:             L1,L3,DRAM
+                                  baseline/extended: L1,L2,L3,DRAM
   --access-pattern <value>      Memory traversal or access pattern (smoke/baseline/extended: random)
-  --stride <n>                  Distance between successive memory accesses (smoke/baseline/extended: 64)
-  --num-iterations <n>          Number of timed repetitions (smoke 20000, baseline 460000000, extended 1243000000)
+  --stride <n>                  Distance between successive memory accesses
+                                  all profiles: 64
+  --num-iterations <n>          Number of timed repetitions
+                                  smoke:    20000
+                                  baseline: 460000000
+                                  extended: 1243000000
 
 General options:
   --config <file>               Config file (default: config/benchmark_config.yaml)
