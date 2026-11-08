@@ -19,10 +19,10 @@ usage() {
 
 Usage: bash run_benchmark.sh [OPTIONS]
 
-Workload Name:          NUMA Cache Latency Sweep.
-Main Goal:              Measure NUMA local vs remote stride-walk latency.
+Workload Name:          NUMA Cache Latency Sweep
+Main Goal:              Measure NUMA local vs remote stride-walk latency
 Command Tools Executed: Build and run numa_sweep via collect_numa_cache.py, with numactl and
-                        optional perf stat.
+                        optional perf stat
 
 Profiles (default: --smoke):
   --smoke                       Run smoke profile
