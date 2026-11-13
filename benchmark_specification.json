@@ -40,6 +40,11 @@
     "value": "Build and run numa_sweep via collect_numa_cache.py, with numactl and optional perf stat"
   },
   {
+    "field_name": "Execution Description With Parameters",
+    "source_file": "BenchmarkSpecDefinitions.xlsx::Workload_Definitions",
+    "value": "Builds src/numa_sweep.cpp and runs scripts/collect_numa_cache.py (dispatched by scripts/collect_workload.py) for local/remote working-set sizes. source_numa_node/target_numa_node: intended bind pair (yaml 0 versus 0,remote). working_set_size: swept footprints. num_threads, page_size, cache_level, access_pattern, stride, and num_iterations come from yaml. Optional perf stat -e cache-misses may record 0 if perf_event_open is blocked; numactl mempolicy falls back if the container denies it. The overlay writes the full METRICS_CSV (local/remote latency, cross-socket ratio, bandwidth, and cache-misses) into the raw file; the harness does not strip the file to latency-only columns"
+  },
+  {
     "field_name": "Metrics",
     "source_file": "BenchmarkSpecDefinitions.xlsx::Workload_Definitions",
     "value": "#1: Largest cache-tier pointer-chase latency, ns (cache_latency_nsec); #2: Local DRAM pointer-chase latency, ns (local_numa_node_latency_nsec); #3: Pointer-chase payload rate, GB/s (local_dram_pointer_chase_bandwidth_gb_s); #4: DRAM-tier cache misses/s (cache_miss_counters_misses_sec)"
@@ -173,11 +178,6 @@
     "field_name": "Command Methodology",
     "source_file": "BenchmarkSpecDefinitions.xlsx::Workload_Definitions",
     "value": "Build src/numa_sweep.cpp and run a stride-64 pointer chase on yaml local and remote NUMA targets for each working_set_size, optionally under perf stat -e cache-misses. Record local versus remote latency, cross-socket ratio, bandwidth, and miss rate. collect_numa_cache.py writes those metrics into the harness raw file"
-  },
-  {
-    "field_name": "Execution Description With Parameters",
-    "source_file": "BenchmarkSpecDefinitions.xlsx::Workload_Definitions",
-    "value": "Builds src/numa_sweep.cpp and runs scripts/collect_numa_cache.py (dispatched by scripts/collect_workload.py) for local/remote working-set sizes. source_numa_node/target_numa_node: intended bind pair (yaml 0 versus 0,remote). working_set_size: swept footprints. num_threads, page_size, cache_level, access_pattern, stride, and num_iterations come from yaml. Optional perf stat -e cache-misses may record 0 if perf_event_open is blocked; numactl mempolicy falls back if the container denies it. The overlay writes the full METRICS_CSV (local/remote latency, cross-socket ratio, bandwidth, and cache-misses) into the raw file; the harness does not strip the file to latency-only columns"
   },
   {
     "field_name": "Execution Domain",
